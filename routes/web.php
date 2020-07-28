@@ -19,22 +19,38 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-//Specialty
-Route::get('/specialties', 'SpecialtyController@index');
-Route::get('/specialties/create', 'SpecialtyController@create');//Formulario de registro
-Route::get('/specialties/{specialty}/edit', 'SpecialtyController@edit');
+
+Route::middleware(['auth', 'admin'])->namespace('Admin')->group(function () {
+    //Specialty
+    Route::get('/specialties', 'SpecialtyController@index');
+    Route::get('/specialties/create', 'SpecialtyController@create');//Formulario de registro
+    Route::get('/specialties/{specialty}/edit', 'SpecialtyController@edit');
 
 
-Route::post('/specialties', 'SpecialtyController@store');//Envio de lformulario por metodo post
-Route::put('/specialties/{specialty}', 'SpecialtyController@update');
+    Route::post('/specialties', 'SpecialtyController@store');//Envio de lformulario por metodo post
+    Route::put('/specialties/{specialty}', 'SpecialtyController@update');
 
-Route::delete('/specialties/{specialty}', 'SpecialtyController@destroy');//Envio de lformulario por metodo post
-
-
-//Doctors
-//otro metodo para no crear cada una de las rutas manualmente con el comando
-//php artisan make:controller <Nombre del controlador> --resource
-Route::resource('doctors', 'DoctorController');
+    Route::delete('/specialties/{specialty}', 'SpecialtyController@destroy');//Envio de lformulario por metodo post
 
 
-//patients
+    //Doctors
+    Route::resource('doctors', 'DoctorController');
+    //otro metodo para no crear cada una de las rutas manualmente con el comando
+    //php artisan make:controller <Nombre del controlador> --resource
+   
+   //patients
+    Route::resource('patients', 'PatientsController');
+
+
+    
+});
+
+Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function () {
+Route::get('/schedule', 'ScheduleController@edit');
+Route::post('/schedule', 'ScheduleController@store');
+    
+});
+
+
+
+
