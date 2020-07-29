@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Doctor;
-
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\WorkDay;
@@ -15,7 +15,16 @@ class ScheduleController extends Controller
             'Jueves','Viernes','Sábado','Domingo'
 
         ];
-        return view('schedule', compact('days'));
+        $workDays = WorkDay::where('user_id', auth()->id())->get();
+        $workDays->map(function($wkDay){
+            $wkDay->morning_start = (new Carbon($wkDay->morning_start))->format('g:i A');
+            $wkDay->morning_end = (new Carbon($wkDay->morning_end))->format('g:i A');
+            $wkDay->afternoon_start = (new Carbon($wkDay->afternoon_start))->format('g:i A');
+            $wkDay->afternoon_end = (new Carbon($wkDay->afternoon_end))->format('g:i A');
+            return $wkDay;
+        });
+        //dd($workDays->toArray());
+        return view('schedule', compact('workDays','days'));
     }
 
     public function store(Request $request)
