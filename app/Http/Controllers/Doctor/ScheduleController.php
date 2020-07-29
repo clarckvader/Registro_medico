@@ -8,13 +8,15 @@ use App\WorkDay;
 
 class ScheduleController extends Controller
 {
+    private $days=[
+        'lunes','Martes','Miércoles',
+        'Jueves','Viernes','Sábado','Domingo'
+
+    ];
+
     public function edit()
     {
-        $days=[
-            'lunes','Martes','Miércoles',
-            'Jueves','Viernes','Sábado','Domingo'
-
-        ];
+        
         $workDays = WorkDay::where('user_id', auth()->id())->get();
         $workDays->map(function($wkDay){
             $wkDay->morning_start = (new Carbon($wkDay->morning_start))->format('g:i A');
@@ -24,6 +26,7 @@ class ScheduleController extends Controller
             return $wkDay;
         });
         //dd($workDays->toArray());
+        $days = $this->days;
         return view('schedule', compact('workDays','days'));
     }
 
@@ -32,11 +35,20 @@ class ScheduleController extends Controller
 
       $active = $request->input('active') ?: [];
       $morning_start = $request->input('morning_start');
-      $morning_end = $request->input('morning_start');
+      $morning_end = $request->input('morning_end');
       $afternoon_start = $request->input('afternoon_start');
       $afternoon_end = $request->input('afternoon_end');
      
+        $errors = [];
         for($i=0; $i<7; ++$i){
+            if($morning_start[$i]>=$morning_end[$i]){
+                $errors[]= 'Las horas del turno mañana son inconsistentes para el dia ' . $this->days[$i] . '.' ;
+                
+            }
+            if($afternoon_start[$i]>=$afternoon_end[$i]){
+                $errors[]= 'Las horas del turno tarde son inconsistentes para el dia ' . $this->days[$i] . '.';
+            }
+
             WorkDay::updateOrCreate(
                 [
                     'day'=> $i,
@@ -56,8 +68,11 @@ class ScheduleController extends Controller
             
         
 
+            if(count($errors)>0)
+                return back()->with(compact('errors'));
+            $notification='Los cambios se han guardado correctamente';
+            return back()->with(compact('notification'));   
             
-        return back();
        
     }
        
