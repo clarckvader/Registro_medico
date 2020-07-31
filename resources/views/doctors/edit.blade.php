@@ -1,4 +1,9 @@
 @extends('layouts.panel')
+@section('styles')
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+@endsection
 
 @section('content')
 
@@ -48,6 +53,15 @@
                 <input type="text" name="phone" class="form-control" value="{{old('phone',$doctor->phone)}}">
             </div>
             <div class="form-group">
+                <label for="specialties">Especialidades del médico</label>
+                <select name="specialties[]" id="specialties" class="form-control selectpicker" data-style="btn-secondary text-muted" multiple title="Seleccione una o varias">
+                    @foreach ($specialties as $specialty)
+                        <option value="{{$specialty->id}}">{{$specialty->name}}</option>
+                    @endforeach
+
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="password">Contraseña</label>
                 <input type="text" name="password" class="form-control" value="">
                 <p>* Ingrese un valor solo si desea modificar la contraseña</p>
@@ -59,4 +73,15 @@
         </form>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>   
+{{--Funcion para mostrar las especialidades que tiene asignadas el medico una vez la pagina este cargada--}}
+<script>
+    $(document).ready(()=>{
+        $('#specialties').selectpicker('val',@json($specialty_ids));
+    })
+</script>
+
 @endsection

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\User;
-
+use App\Specialty;
 use App\Http\Controllers\Controller;
 
 class DoctorController extends Controller
@@ -27,7 +27,8 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('doctors.create');
+        $specialties = Specialty::all();
+        return view('doctors.create', compact('specialties'));
     }
 
     /**
@@ -38,6 +39,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
+        
          $rules = [
             'name' => 'required|min:3',
             'email' => 'required|email',
@@ -47,13 +49,17 @@ class DoctorController extends Controller
         ];
         $this->validate($request, $rules);
 
-         User::create(
+         $user = User::create(
             $request->only('name', 'email', 'ci', 'address', 'phone')
             + [
                 'role' => 'doctor',
                 'password' => bcrypt($request->input('password'))
             ]
         );
+
+        //utilizando attach, creamos una nueva relacion entre un medico y sus especialidades
+        $user->specialties()->attach($request->input('specialties'));
+
         $notification = 'El medico se ha registrado correctamente.';
         return redirect('/doctors')->with(compact('notification'));
     }
@@ -78,7 +84,10 @@ class DoctorController extends Controller
     public function edit($id)
     {
         $doctor = User::Doctors()->findOrFail($id);
-        return view('doctors.edit', compact('doctor'));
+        $specialties = Specialty::all();
+        //Usando pluck para obetneer el id de las especialidades asociadas a un medico
+        $specialty_ids=$doctor->specialties()->pluck('specialties.id');
+        return view('doctors.edit', compact('doctor','specialties', 'specialty_ids'));
     }
 
     /**
@@ -99,7 +108,11 @@ class DoctorController extends Controller
     $this->validate($request, $rules);
 
      $user = User::doctors()->findorfail($id);
-     $data = $request->only('name', 'email', 'ci', 'address', 'phone'); 
+     $data = $request->only('name', 'email', 'ci', 'address', 'phone');
+
+     //Utilizando Sync, agregamos o eliminamos especilidades sincronizando estas al editar un medico
+     $user->specialties()->sync($request->input('specialties')); 
+     
      $password = $request->input('password');
     if($password)
         $data['password'] = bcrypt($password);
