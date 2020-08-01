@@ -18,13 +18,22 @@ class ScheduleController extends Controller
     {
         
         $workDays = WorkDay::where('user_id', auth()->id())->get();
-        $workDays->map(function($wkDay){
-            $wkDay->morning_start = (new Carbon($wkDay->morning_start))->format('g:i A');
-            $wkDay->morning_end = (new Carbon($wkDay->morning_end))->format('g:i A');
-            $wkDay->afternoon_start = (new Carbon($wkDay->afternoon_start))->format('g:i A');
-            $wkDay->afternoon_end = (new Carbon($wkDay->afternoon_end))->format('g:i A');
-            return $wkDay;
-        });
+        
+        if(count($workDays)>0){
+            $workDays->map(function($wkDay){
+                $wkDay->morning_start = (new Carbon($wkDay->morning_start))->format('g:i A');
+                $wkDay->morning_end = (new Carbon($wkDay->morning_end))->format('g:i A');
+                $wkDay->afternoon_start = (new Carbon($wkDay->afternoon_start))->format('g:i A');
+                $wkDay->afternoon_end = (new Carbon($wkDay->afternoon_end))->format('g:i A');
+                return $wkDay;
+            });
+
+        }else{
+           $workDays = collect();
+           for($i = 0; $i<7; ++$i)
+                $workDays->push(new WorkDay());
+        }
+
         //dd($workDays->toArray());
         $days = $this->days;
         return view('schedule', compact('workDays','days'));
@@ -41,11 +50,11 @@ class ScheduleController extends Controller
      
         $errors = [];
         for($i=0; $i<7; ++$i){
-            if($morning_start[$i]>=$morning_end[$i]){
+            if($morning_start[$i]>$morning_end[$i]){
                 $errors[]= 'Las horas del turno mañana son inconsistentes para el dia ' . $this->days[$i] . '.' ;
                 
             }
-            if($afternoon_start[$i]>=$afternoon_end[$i]){
+            if($afternoon_start[$i]>$afternoon_end[$i]){
                 $errors[]= 'Las horas del turno tarde son inconsistentes para el dia ' . $this->days[$i] . '.';
             }
 
