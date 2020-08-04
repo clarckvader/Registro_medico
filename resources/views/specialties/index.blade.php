@@ -27,13 +27,14 @@
                
     </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive ">
                 <!-- Projects table -->
                 <table class="table align-items-center table-flush">
-                    <thead class="thead-light">
+                    <thead class="thead-light ">
                         <tr>
                             <th scope="col">Nombre</th>
                             <th scope="col">Descripcion</th>
+                            
                             <th scope="col">Opciones</th>
                             
                         </tr>

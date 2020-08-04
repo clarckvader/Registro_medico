@@ -45,13 +45,16 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                     </div>
-                    <input class="form-control datepicker" placeholder="Seleccionar fecha" type="text" value="{{date('Y-m-d')}}" data-date-format="yyyy-mm-dd" data-date-start-date="{{date('Y-m-d')}}" 
+                    <input class="form-control datepicker" 
+                    placeholder="Seleccionar fecha" id="date" type="text" 
+                    value="{{date('Y-m-d')}}" data-date-format="yyyy-mm-dd"
+                    data-date-start-date="{{date('Y-m-d')}}" 
                     data-date-end-date="+30d">
                 </div>
             </div>
             <div class="form-group">
                 <label for="address">Hora de atención</label>
-                <input type="text" name="address" class="form-control" value="{{old('address')}}">
+                <div id="hours"></div>
             </div>
             <div class="form-group">
                 <label for="phone">Teléfono/móvil</label>
@@ -67,27 +70,5 @@
 
 @section('scripts')
 <script src="{{asset('/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
-<script>
-let $doctor;
-
-$(function(){
-
-    const $specialty = $('#specialty');
-    $doctor= $('#doctor');
-
-    $specialty.change(()=>{
-        const specialtyId=$specialty.val();    
-        const url=`/specialties/${specialtyId}/doctors`;
-        $.getJSON(url , onDoctorsLoaded);
-    });
-});  
-
-function onDoctorsLoaded(doctors){
-    let htmlOptions = '';
-    doctors.forEach(doctor => {
-       htmlOptions += `<option value="${doctor.id}">${doctor.name}</option>`
-    });
-    $doctor.html(htmlOptions);
-}
-</script>
+<script src="{{asset('/js/appointments/create.js')}}"></script>
 @endsection

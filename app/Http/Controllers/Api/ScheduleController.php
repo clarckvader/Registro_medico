@@ -32,6 +32,10 @@ class ScheduleController extends Controller
             'afternoon_start','afternoon_end'
         ]);
 
+        if(!$workDay){
+            return [];
+        }
+
         $morningIntervals = $this->getIntervals($workDay->morning_start,$workDay->morning_end );
         $AftertoonIntervals = $this->getIntervals($workDay->afternoon_start,$workDay->afternoon_end);
 
