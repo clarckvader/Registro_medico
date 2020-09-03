@@ -28,7 +28,7 @@
             @csrf
             <div class="form-group">
                 <label for="description">Descripción</label>
-            <textarea name="description" class="form-control" type="text" id="description" rows="3" value="{{old('description')}}" placeholder="Describe brevemente tu consulta" required></textarea>
+            <input name="description" class="form-control" type="text" id="description" rows="3" value="{{old('description')}}" placeholder="Describe brevemente tu consulta" required>
             </div>
 
             <div class="form-row">
@@ -68,7 +68,7 @@
                     value="{{old('schedule_date', date('Y-m-d'))}}" 
                     data-date-format="yyyy-mm-dd"
                     data-date-start-date="{{date('Y-m-d')}}" 
-                    data-date-end-date="+30d">
+                    data-date-end-date="+30d" data-date-language="br">
                 </div>
             </div>
             <div class="form-group">

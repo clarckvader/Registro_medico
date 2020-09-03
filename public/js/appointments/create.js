@@ -6,7 +6,7 @@ const noHoursAlert = `<div class="alert alert-warning" role="alert">
 <strong>Lo sentimos</strong>, no se encontraron horas disponibles para el médico en el dia seleccionado. 
 </div>`;
 
-$(function(){
+$(function specialtyChange(){
 
     $specialty = $('#specialty');
     $date = $('#date');
@@ -16,6 +16,7 @@ $(function(){
     $specialty.change(()=>{
         const specialtyId=$specialty.val();    
         if(specialtyId){
+            
             const url=`/specialties/${specialtyId}/doctors`;
             $.getJSON(url , onDoctorsLoaded);
         }
@@ -24,7 +25,12 @@ $(function(){
 
     $doctor.change(loadHours)
     $date.change(loadHours);
+
+    
 });  
+
+
+
 
 function onDoctorsLoaded(doctors){
     let htmlOptions = '';

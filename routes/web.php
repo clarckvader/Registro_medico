@@ -54,6 +54,12 @@ Route::post('/schedule', 'ScheduleController@store');
 Route::middleware('auth')->group(function(){
     Route::get('/appointments/create', 'AppointmentController@create');
     Route::post('/appointments', 'AppointmentController@store');
+
+
+    Route::get('/appointments','AppointmentController@index');
+    Route::get('/appointments/{appointment}/cancel','AppointmentController@cancelForm');
+    Route::put('/appointments/{appointment}/cancel','AppointmentController@cancel');
+    
     //json
     Route::get('/specialties/{specialty}/doctors','Api\SpecialtyController@doctors');
     Route::get('/schedule/hours','Api\ScheduleController@hours');

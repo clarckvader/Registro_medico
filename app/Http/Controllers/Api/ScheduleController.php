@@ -14,10 +14,10 @@ class ScheduleController extends Controller
 
     $rules = [
         'date' => 'required|date_format:"Y-m-d',
-        'doctor_id'=>'required|exists:users, id'
+        'doctor_id'=>'required|exists:users,id'
     ];
 
-    //$this->validate($request, $rules);
+    $this->validate($request, $rules);
 
     //dd($request->all());
    
