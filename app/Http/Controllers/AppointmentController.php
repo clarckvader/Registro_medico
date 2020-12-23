@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 use App\Specialty;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
-use App\Appoinment;
 use App\CancelledAppointment;
-
 class AppointmentController extends Controller
 {
     public function index(){
@@ -135,13 +133,11 @@ class AppointmentController extends Controller
             $cancellation->cancelled_by = auth()->id();
             //$cancellation->appointment_id = ;
             //$cancellation->save();
-
+            $appointment->status = 'Cancelada';
             $appointment->cancellation()->save($cancellation);
+            $notification="La cita se ha cancelado correctamente";
         }
-            
-        $appointment->status = 'Cancelada';
-        $appointment->save();
-        $notification="La cita se ha cancelado correctamente";
+       
         return redirect('/appointments')->with(compact('notification'));
     }
 

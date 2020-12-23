@@ -42,7 +42,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/home">
+            <a class="nav-link" href="/appointments">
                 <i class="ni ni-time-alarm text-primary"></i> Mis citas
             </a>
         </li>

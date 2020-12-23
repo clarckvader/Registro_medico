@@ -16,10 +16,10 @@ class CreateCancelledAppointmentsTable extends Migration
         Schema::create('cancelled_appointments', function (Blueprint $table) {
             $table->Increments('id');
             $table->unsignedInteger('appointment_id');
-            $table->foreign('appointment_id')->references('id')->on('appointments');
+            $table->foreign('appointment_id')->references('id')->on('appointments')->onDelete('cascade');
             $table->string('justification')->nullable();
             $table->unsignedInteger('cancelled_by');
-            $table->foreign('cancelled_by')->references('id')->on('users');
+            $table->foreign('cancelled_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -24,10 +24,10 @@ class CreateAppointmentsTable extends Migration
 
             //fk specialty
             $table->unsignedInteger('specialty_id');
-            $table->foreign('specialty_id')->references('id')->on('specialties');
+            $table->foreign('specialty_id')->references('id')->on('specialties')->onDelete('cascade');
             //fk patients
             $table->unsignedInteger('patient_id');
-            $table->foreign('patient_id')->references('id')->on('users');
+            $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
 
 
             $table->date('schedule_date');
@@ -35,7 +35,6 @@ class CreateAppointmentsTable extends Migration
 
             $table->string('type');
 
-            $table->string('status')->default(('Reservada'));
             //reservado, confirmada , atendidad, cancelada
 
             $table->timestamps();

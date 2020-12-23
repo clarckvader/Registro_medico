@@ -18,10 +18,10 @@ class CreateSpecialtyUserTable extends Migration
 
             //doctor
             $table->unsignedInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             //specialty
             $table->unsignedInteger('specialty_id');
-            $table->foreign('specialty_id')->references('id')->on('specialties');
+            $table->foreign('specialty_id')->references('id')->on('specialties')->onDelete('cascade');
 
 
             $table->timestamps();
